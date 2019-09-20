@@ -1,0 +1,35 @@
+{{extend ('./layout.html')}}
+
+{{#block ("body")}}
+  <div class="swiper-slide" style="width: 750px;height:1200px;overflow:auto">
+    {{#each(group)}}
+    <div class="group news">
+      <div class="group_tit">
+        <h1>{{this.name}}</h1>
+      </div>
+      {{#if(this.userlist.length)}}
+      <ul>
+        {{#each(this.userlist, "value", "key")}}
+        <li>
+          <a href="/user/groupChat?friend={{value.friend}}">
+            <div class="lf">
+              {{#if( value.avatar === "")}}
+                <img src="/home/img/a1.png" />
+              {{else}}
+                <img src="{{this.avatar}}" />
+              {{/if}}
+              <h1>{{value.username}}</h1>
+            </div>
+            <div class="rt">
+              <span></span>
+            </div>
+          </a>
+        </li>
+        {{/each}}
+      </ul>
+      {{/if}}
+
+    </div>
+    {{/each}}
+  </div>
+{{/block}}

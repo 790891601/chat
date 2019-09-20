@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=750,user-scalable=no">
+    <title>添加好友</title>
+    <link rel="stylesheet" href="/home/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/home/css/public.css" />
+    <link rel="stylesheet" href="/home/css/group.css" />
+    <style type="text/css">
+      .friendlist img {
+        width: 65px;
+        border-radius: 100%;
+        margin-top: 15px; 
+        vertical-align: top;
+      }
+
+      .friendlist ul li span {
+        display: inline-block;
+      }
+
+      .form-control {
+        font-size: 35px;
+        margin-top: 25px;
+        height: 100%;
+        width: 95%;
+        border-radius: 10px;
+      }
+
+      .data_box li textarea {
+        height: auto;
+      }
+    </style>
+  </head>
+  <body id="body_bg">
+    <form method="post">
+      <div class="nav_data">
+          <div class="left" onclick="location.href='/user/index'">添加好友</div>
+          <div class="right"><button type="submit">添加</button></div>
+      </div>
+      <div class="data_box">
+        <ul>
+            <li>
+              <input type="text" placeholder="请输入好友名称" name="name" required />
+            </li>
+            <li>
+              <select name="group" class="form-control" required>
+                {{#each(grouplist)}}
+                  <option value="{{this.id}}">{{this.name}}</option>
+                {{/each}}
+              </select>
+            </li>
+            <li>
+              <textarea name="content" class="form-control" id="friendValid" type="text" required rows="10" cols="15">您好, 我是{{user.username}}，想跟和你交个朋友</textarea>
+            </li>
+        </ul>
+      </div>
+    </form>
+  </body>
+</html>
+<script>
+  var friendValid = document.getElementById("friendValid");
+  var defaultVal = friendValid.value;
+
+  friendValid.onfocus = function(e) {
+    if(e.target.value == defaultVal) {
+      e.target.value = "";
+    }
+  }
+
+  friendValid.onblur = function(e) {
+    if(e.target.value == "") {
+      e.target.value = defaultVal;
+    }
+  }
+</script>

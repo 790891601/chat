@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=750,user-scalable=no">
+    <title>添加好友列表</title>
+    <link rel="stylesheet" href="/home/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/home/css/public.css" />
+    <link rel="stylesheet" href="/home/css/group.css" />
+    <style type="text/css">
+      .friendlist li input {
+        position: relative;
+        left: 30%;
+        width: 20%;
+        text-align: center;
+        padding: 0;
+        height: auto;
+        color: #ff6534;
+        line-height: 75px;
+        right: 10px;
+        border: 1px solid #ff6534;
+        background: #f7f7f7;
+      }
+
+      .friendlist li .reject {
+        color: red;
+        border: 1px solid red;
+      }
+
+      .friendlist img {
+        width: 65px;
+        border-radius: 100%;
+        margin-top: 15px; 
+        vertical-align: top;
+      }
+
+      .friendlist ul li span {
+        display: inline-block;
+      }
+
+      .friendlist p {
+        line-height: 75px;
+      }
+
+      .data_box li {
+        height: auto;
+        margin-bottom: 20px;
+      }
+
+      .friendlist strong {
+        position: absolute;
+        right: 40px;
+      }
+    </style>
+  </head>
+  <body id="body_bg">
+    <form method="post">
+      <div class="nav_data">
+          <div class="left" onclick="location.href='/user/index'">添加好友列表</div>
+      </div>
+
+      <div class="data_box friendlist">
+        <ul>
+          {{#each(friendlist)}}
+          <li>
+            <span>
+              {{#if(this.avatar)}}
+                <img src="{{this.avatar}}" />
+              {{else}}
+                <img src="/home/img/a1.png" />
+              {{/if}}
+              {{this.username}}
+            </span>
+            {{#if(this.status === 0)}}
+              <input class="accept" data-id="{{this.userid}}" type="button" value="同意" />
+              <input class="reject" data-id="{{this.userid}}" type="button" value="拒绝" />
+            {{else}}
+              <strong>已拒绝</strong>
+            {{/if}}
+            <p>
+              验证消息： {{this.content}}
+            </p>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+    </form>
+  </body>
+</html>
+<script src="/home/js/jquery-1.8.3.js"></script>
+<script>
+  //同意好友
+  $(".accept").click(function()  {
+    var id = this.dataset.id;
+    $.ajax({
+      url: `http://localhost:9000/user/friendAccept?fromid=${id}`,
+      success: res => {
+        if(res == "1") {
+          $(this).siblings("input").remove();
+          $(this).after("<strong>已同意</strong>");
+          $(this).remove();
+        }else {
+          alert("请先添加分组");
+          window.location.href = "/user/groupAdd";
+        }
+      }
+		});
+  });
+
+  //拒绝好友
+  $(".reject").click(function() {
+    var id = this.dataset.id;
+    $.ajax({
+      url: `http://localhost:9000/user/friendReject?fromid=${id}`,
+      success: res => {
+        //实时更新是否拒绝
+        if(res == "1") {
+          $(this).siblings("input").remove();
+          $(this).after("<strong>已拒绝</strong>");
+          $(this).remove();
+        }
+      }
+		});
+  });
+</script>
